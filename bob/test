@@ -1,0 +1,21 @@
+package main
+
+import (
+	"fmt"
+)
+
+func silent(srt string) bool {
+	var c string
+
+	for i := 0; i < len(srt); i++ {
+		c = string(srt[i])
+		if c == "\n" || c == "\t" || c == "\r" {
+			return true
+		}
+	}
+	return false
+}
+func main() {
+	str := "\r\t\n "
+	fmt.Println(silent(str))
+}
