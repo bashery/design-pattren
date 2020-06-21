@@ -1,41 +1,58 @@
 package luhn
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
 
-// insubmet solution
+// Valid checks is valid luhn code or not
 func Valid(code string) bool {
-	fmt.Println(code)
+
 	code = strings.ReplaceAll(code, " ", "")
-	if len(code) < 2 {
+	chars := strings.Split(code, "")
+
+	// filter invalid lenght
+	if len(chars) < 2 {
 		return false
 	}
 
-	slc := []int{}
-	n := 0
-	for _, v := range code {
-		n, _ = strconv.Atoi(string(v))
-		slc = append(slc, n)
-	}
+	ind := len(chars) - 1
+	rev := make([]int, len(chars))
 
-	sum := 0
-
-	for i := len(slc) - 1; i >= 0; i-- {
-		if len(slc)%2 == 0 {
-			slc[i] = slc[i] * 2
-			if slc[i] > 9 {
-				slc[i] = slc[i] - 9
-			}
-
+	// convete item to int and reverse it
+	for i := 0; i < len(chars); i++ {
+		c, err := strconv.Atoi(chars[i])
+		if err != nil {
+			return false
 		}
-		sum += slc[i]
+		rev[ind] = c
+		ind--
+	}
+
+	// handle second item
+	for k, v := range rev {
+		if k%2 == 0 {
+			continue
+		}
+		v *= 2
+		if v > 9 {
+			rev[k] = v - 9
+			continue
+		}
+		rev[k] = v
 
 	}
-	if sum%10 == 0 {
+
+	// sum total of all items
+	total := 0
+	for _, n := range rev {
+		total += n
+	}
+
+	// filter true result
+	if total%10 == 0 {
 		return true
 	}
+
 	return false
 }
