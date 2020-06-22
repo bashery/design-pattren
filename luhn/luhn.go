@@ -49,10 +49,5 @@ func Valid(code string) bool {
 		total += n
 	}
 
-	// filter true result
-	if total%10 == 0 {
-		return true
-	}
-
-	return false
+	return total%10 == 0
 }
