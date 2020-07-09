@@ -1,15 +1,41 @@
 package anagram
 
-import "fmt"
+import (
+	//	"fmt"
+	"sort"
+	"strings"
+)
 
-func Detect(str string, slc []string) []string {
-	sublist := []rune{}
-	for _, v := range slc {
-		for _, c := range v {
-			sublist = append(sublist, c)
+// Detect resurn word list that containt sam word input letteral
+func Detect(str string, strs []string) []string {
+	str = strings.ToLower(str)
+	sbj := sortStr(str)
+	res := make([]string, 0)
 
+	for _, w := range strs {
+		match := w
+		w = strings.ToLower(w)
+		if str == w {
+			continue
+		}
+		word := sortStr(w)
+		if sbj == word {
+			res = append(res, match)
 		}
 	}
-	fmt.Println(str, slc)
-	return []string{}
+
+	return res
+}
+
+func sortStr(str string) string {
+	slc := make([]int, 0)
+	for _, c := range str {
+		slc = append(slc, int(c))
+	}
+	sort.Ints(slc)
+	res := ""
+	for _, c := range slc {
+		res += string(int32(c))
+	}
+	return res
 }
