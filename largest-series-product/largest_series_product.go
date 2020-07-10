@@ -2,100 +2,76 @@ package lsproduct
 
 import (
 	"errors"
-
 	"fmt"
-	"strconv"
+	//"strconv"
 )
 
 // this take a string as number wth and return>>>
-func LargestSeriesProduct(s string, l int) (int, error) {
-	fmt.Println("input s is : ", s, "l is : ", l, "len of input is :", len(s))
-	fmt.Println()
-	s, err := check(s)
-	if err != nil {
-		return 0, err
-	}
-	if len(s) == l && l != 0 {
-		return total1(s)
-	}
-	if len(s) > l {
-		return total2(s, l)
-	}
-	if len(s) < l {
-		return 1, errors.New("error")
-	}
-
-	return 1, nil //errors.New("error")
-}
-
-func total2(s string, l int) (int, error) {
-	//list := make([]int, l)
-	if l > len(s) {
-		l = len(s) - 1
-	}
+func LargestSeriesProduct(str string, l int) (int, error) {
 	if l == 0 {
 		return 1, nil
 	}
-	res := 0
+	if l < 0 {
+		return 1, errors.New("len str error!")
+	}
+	_, err := filter(str, l)
+	if err != nil {
+		return 0, err
+	}
+	if len(str) == l {
+		return getEq(str, l)
+	}
+
 	total := 0
-	for i := 0; i < len(s)-l; i++ {
-		n := int(s[i+1]) - 48
+	for i := 0; i < len(str)-l; i++ {
+		n := 1
+		fmt.Println("--")
 
-		if n == 0 {
-			continue
+		for j := i + 1; j <= i+l; j++ {
+			fmt.Println("j is ", j)
+
+			n *= (int(str[j]) - 48)
 		}
-
-		total = n
-		fmt.Println("n is ", n)
-		list := make([]int, l)
-		inc := 0
-
-		for j := i + 1; j < i+l; j++ {
-
-			total *= (int(s[j+1]) - 48)
-
-			list[inc] = int(s[j+1]) - 48
-			inc++
-			fmt.Print("inc is : ", inc, "list is :", list)
-		}
-		//fmt.Println("\ntotal is :", total)
-		fmt.Println()
-		if total > res {
-			res = total
+		if total < n {
+			total = n
 		}
 	}
-	return res, nil
+
+	return total, nil
 }
 
-func total1(s string) (int, error) {
-	list := make([]int, len(s))
-	for i, v := range s {
-		n, err := strconv.Atoi(string(v))
-		if err != nil {
-			return 0, err
+func getEq(str string, l int) (int, error) {
+
+	total := 0
+	n := 1
+	for i := 0; i < len(str); i++ {
+		n *= (int(str[i]) - 48)
+		if total < n {
+			total = n
 		}
-		list[i] = n
-
 	}
-	res := list[0]
-	for _, v := range list[1:] {
-		res *= v
-	}
-	return res, nil
 
+	return total, nil
 }
-func check(s string) (string, error) {
-	allow := "0123456789"
-	res := ""
-	for _, v := range allow {
-		for _, c := range s {
-			if v == c {
-				res += string(c)
+
+// check if len and all tocke is str digit and return it
+func filter(s string, l int) (string, error) {
+	if len(s) < l {
+		return "", errors.New("len str error!")
+	}
+
+	tokn := "0123456789"
+	str := ""
+	for _, c := range s {
+		for _, t := range tokn {
+			if c == t {
+				str += string(t)
+				break
 			}
 		}
 	}
-	if len(res) != len(s) {
-		return "", errors.New("error!  invalid string integer")
+	if len(s) > len(str) {
+		return "", errors.New("token error!")
 	}
-	return res, nil
+	return str, nil
 }
