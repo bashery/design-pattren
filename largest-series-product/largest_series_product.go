@@ -2,8 +2,6 @@ package lsproduct
 
 import (
 	"errors"
-	"fmt"
-	//"strconv"
 )
 
 // this take a string as number wth and return>>>
@@ -25,11 +23,8 @@ func LargestSeriesProduct(str string, l int) (int, error) {
 	total := 0
 	for i := 0; i < len(str)-l; i++ {
 		n := 1
-		fmt.Println("--")
 
 		for j := i + 1; j <= i+l; j++ {
-			fmt.Println("j is ", j)
-
 			n *= (int(str[j]) - 48)
 		}
 		if total < n {
