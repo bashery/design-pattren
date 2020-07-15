@@ -1,37 +1,17 @@
 package sieve
 
-import (
-	"fmt"
-)
-
+// Sieve teturn list of prime number
 func Sieve(up int) []int {
-	fmt.Println("new test with : ", up)
-	res := []int{}
-	//if up == 2 {		res = append(res, 2)	}
+	primes := []int{}
+	stor := map[int]string{}
 
 	for i := 2; i <= up; i++ {
-		prime := true
-		for j := 2; j <= i; j++ {
-
-			fmt.Println(i, "%", j, "=", i%j)
-			if j == i {
-				break
+		if stor[i] == "" {
+			primes = append(primes, i)
+			for j := i + i; j <= up; j += i {
+				stor[j] = "1"
 			}
-			if i%j == 0 {
-				fmt.Println()
-
-				prime = false
-				continue
-			}
-
 		}
-		if prime == true {
-
-			fmt.Println(i, " ok")
-			res = append(res, i)
-		}
-
 	}
-	fmt.Println(res)
-	return res
+	return primes
 }
