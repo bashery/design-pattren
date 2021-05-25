@@ -1,5 +1,6 @@
 // linked list data structer
-package linkedlist
+//package linkedlist
+package main
 
 import "fmt"
 
@@ -20,16 +21,33 @@ func (l *LinkedList) Prepend(n *Node) {
      l.Lenght ++
 }
 
-func (l *LinkedList) PrintData() {
-    toPrint := l.Head
+func (l LinkedList) PrintData() {
+    head := l.Head
+    
     for l.Lenght != 0 {
-        fmt.Printf("%d, %d\n", toPrint.Data, l.Lenght)
-        toPrint = toPrint.Next
-        l.Lenght --
+        fmt.Printf("%d, ", head.Data)
+        head = head.Next
+        l.Lenght--
     }
+    fmt.Println()
 }
 
-/*
+func (list *LinkedList) Delete(value int) {
+    if list.Lenght == 0 {
+        return
+    }
+
+    previousToDelete := list.Head
+    for previousToDelete.Next.Data != value {
+        if previousToDelete.Next.Next == nil {
+            return
+        }
+        previousToDelete = previousToDelete.Next
+    }
+    previousToDelete.Next = previousToDelete.Next.Next
+    list.Lenght--
+} 
+
 func main() {
     list := LinkedList{}
 
@@ -43,5 +61,6 @@ func main() {
     list.Prepend(&Node{Data:37})
 
     list.PrintData()
+    list.Delete(2220)
+    list.PrintData()
 }
-*/
