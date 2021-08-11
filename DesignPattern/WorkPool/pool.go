@@ -39,3 +39,28 @@ func (p *pool) loan() (iPoolObject, error) {
     fmt.Printf("Loan Pool Object with ID: %s\n", obj.getID())
     return obj, nil
 }
+
+func (p *pool) receive(target iPoolObject) error {
+    p.mulock.Lock()
+    defer p.mulock.Unlock()
+    err := p.remove(target)
+    if err != nil {
+        return err
+    }
+    p.idle = append(p.idle, target)
+    fmt.Printf("Return Pool Object with ID: %s\n", target.getID())
+    return nil
+}
+
+func (p *pool) remove(target iPoolObject) error {
+    currentActiveLength := len(p.active)
+    for i, obj := range p.active {
+        if obj.getID() == target.getID() {
+            p.active[currentActiveLength-1], p.active[i] = p.active[i], p.active[currentActiveLength-1]
+            p.active = p.active[:currentActiveLength-1]
+            return nil
+        }
+    }
+    return fmt.Errorf("Targe pool object doesn't belong to the pool")
+}
+
